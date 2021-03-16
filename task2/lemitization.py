@@ -27,7 +27,7 @@ def get_normal_form(tokens):
         temp_set = set()
         for candidate in parsed_word:
             temp_set.add(candidate.normal_form)
-        normalized_words[token] = temp_set
+        normalized_words[token.lower()] = temp_set
     return normalized_words
 
 
@@ -50,15 +50,14 @@ def sanitize_text(text_to_process):
     return [token for token in tokens if token not in puncto and not contains_numeric(token)]
 
 
-texts = list()
+texts = dict()
 for i in range(100):
     text = parse_text(i)
     text = sanitize_text(text)
     append_to_file('Words.txt', text)
     normalized_text = get_normal_form(text)
-    texts.append(normalized_text)
+    texts.update(normalized_text)
 
 with open("data/Lems.txt", 'a', encoding='utf-8') as f:
-    for text in texts:
-        for key, value in text.items():
-            f.write(key + ' ' + str.join(' ', value) + '\n')
+    for key, value in texts.items():
+        f.write(key + ' ' + str.join(' ', value) + '\n')
