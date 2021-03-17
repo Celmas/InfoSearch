@@ -38,7 +38,12 @@ def contains_numeric(string):
 def append_to_file(filename, content):
     os.makedirs("data", exist_ok=True)
     with open("data/" + filename, 'a', encoding='utf-8') as f:
-        f.write(str.join('\n', content))
+        analyzer = pymorphy2.MorphAnalyzer()
+        functors_pos = {'INTJ', 'PRCL', 'CONJ', 'PREP'}
+        for token in content:
+            parsed_word = analyzer.parse(token)
+            if parsed_word[0].tag.POS in functors_pos: continue
+            f.write(token + '\n')
 
 
 def sanitize_text(text_to_process):
