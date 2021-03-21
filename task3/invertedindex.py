@@ -5,6 +5,8 @@ import re
 from lxml import etree
 from typing import Final
 
+from task3.parser import BooleanParser
+
 RE_D: Final = re.compile('\d')
 
 
@@ -66,27 +68,6 @@ with open("data/invertedIndex.txt", 'w', encoding='utf-8') as f:
     for key, value in texts.items():
         f.write(key + ' ' + str(sorted(value)) + '\n')
 
-docs_indxs = set(range(0, 100))
-operation_line = input('Напишите выражение вида: car AND apple | car OR apple | NOT car\n')
-split_line = operation_line.split()
-analyzer = pymorphy2.MorphAnalyzer()
-if 'NOT' in operation_line:
-    first = analyzer.parse(split_line[1])[0].normal_form
-    if first not in texts:
-        print('Слова ' + split_line[1] + ' нету')
-    else:
-        print(sorted(docs_indxs.difference(texts[first])))
-else:
-    first = analyzer.parse(split_line[0])[0].normal_form
-    second = analyzer.parse(split_line[2])[0].normal_form
-    if first not in texts:
-        print('Слова ' + split_line[0] + ' нету')
-    elif second not in texts:
-        print('Слова ' + split_line[2] + ' нету')
-    else:
-        first_set = texts[first]
-        second_set = texts[second]
-        if 'AND' in operation_line:
-            print(sorted(first_set.intersection(second_set)))
-        elif 'OR' in operation_line:
-            print(sorted(first_set.union(second_set)))
+boolean_search_line = input("Enter boolean search line. Operators: AND, OR, NOT\n")
+result = BooleanParser.parseString(boolean_search_line, texts)
+print(result)
