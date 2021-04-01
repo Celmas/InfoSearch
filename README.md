@@ -26,5 +26,5 @@ python crawler
 cd task5
 ```
 ```bash
-streamlit run search
+streamlit run search.py
 ```
